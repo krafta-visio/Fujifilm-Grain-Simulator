@@ -83,7 +83,7 @@ Built with modern web technologies:
 
 ## 🚀 Live Demo
 
-[Add your GitHub Pages link here]
+[https://krafta-visio.github.io/Fujifilm-Grain-Simulator]
 
 ## 📦 Installation
 
@@ -92,4 +92,5 @@ Want to run it locally? Just clone and open:
 ```bash
 git clone https://github.com/yourusername/fujifilm-grain-simulator.git
 cd fujifilm-grain-simulator
+
 # Open index.html in your browser - that's it!
