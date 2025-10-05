@@ -166,3 +166,18 @@ body {
         padding: 4px 10px;
     }
 }
+
+
+#customLutUpload {
+    transition: all 0.3s ease;
+}
+
+.lut-preview {
+    width: 100%;
+    height: 40px;
+    border-radius: 4px;
+    margin-top: 5px;
+    background: linear-gradient(90deg, 
+        #ff0000 0%, #ffff00 17%, #00ff00 33%, 
+        #00ffff 50%, #0000ff 67%, #ff00ff 83%, #ff0000 100%);
+}

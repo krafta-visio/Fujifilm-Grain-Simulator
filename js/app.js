@@ -5,7 +5,7 @@
  * @developer krafta.
  * @portfolio https://www.facebook.com/krafta.visio
  * @github https://github.com/krafta-visio
- * @version 1.0.0
+ * @version 2.0.0
  * @created 2025
  */
 
@@ -14,29 +14,37 @@ class FujiGrainApp {
         this.validator = new FileValidator();
         this.exifReader = new ExifReader();
         this.grainProcessor = new GrainProcessor();
+        this.lutProcessor = new LUTProcessor();
         
         this.originalImage = null;
         this.processedCanvas = null;
         this.currentSettings = {};
         this.currentFile = null;
+        this.availableLUTs = [];
         
+        this.initializeApp();
+    }
+
+    initializeApp() {
+        console.log('🚀 Initializing Fujifilm Grain Simulator...');
         this.initializeEventListeners();
+        this.loadAvailableLUTs();
+        this.initializeSettings();
     }
 
     initializeEventListeners() {
-        console.log('Initializing event listeners...');
+        console.log('📝 Setting up event listeners...');
         
         // File input
-        const fileInput = document.getElementById('imageInput');
-        fileInput.addEventListener('change', (e) => {
+        document.getElementById('imageInput').addEventListener('change', (e) => {
             const file = e.target.files[0];
             if (file) {
-                console.log('File selected:', file.name);
+                console.log('📁 File selected:', file.name);
                 this.handleFileSelect(file);
             }
         });
 
-        // Settings controls
+        // Grain settings controls
         document.getElementById('isoSelect').addEventListener('change', (e) => {
             this.updateSetting('iso', e.target.value);
         });
@@ -49,6 +57,24 @@ class FujiGrainApp {
         document.getElementById('grainSizeSlider').addEventListener('input', (e) => {
             document.getElementById('grainSizeValue').textContent = e.target.value;
             this.updateSetting('grainSize', parseFloat(e.target.value));
+        });
+        
+        // LUT controls
+        document.getElementById('lutSelect').addEventListener('change', (e) => {
+            this.handleLUTSelection(e.target.value);
+        });
+
+        document.getElementById('lutFileInput').addEventListener('change', (e) => {
+            this.handleCustomLUTUpload(e.target.files[0]);
+        });
+
+        document.getElementById('lutStrengthSlider').addEventListener('input', (e) => {
+            document.getElementById('lutStrengthValue').textContent = e.target.value;
+            this.updateSetting('lutStrength', parseFloat(e.target.value));
+        });
+
+        document.getElementById('applyLutToggle').addEventListener('change', (e) => {
+            this.updateSetting('applyLUT', e.target.checked);
         });
 
         // Action buttons
@@ -63,13 +89,69 @@ class FujiGrainApp {
         document.getElementById('downloadBtn').addEventListener('click', () => {
             this.downloadResult();
         });
+    }
 
-        // Initialize settings
+    initializeSettings() {
         this.currentSettings = {
             iso: document.getElementById('isoSelect').value,
             strength: parseFloat(document.getElementById('strengthSlider').value),
-            grainSize: parseFloat(document.getElementById('grainSizeSlider').value)
+            grainSize: parseFloat(document.getElementById('grainSizeSlider').value),
+            selectedLUT: 'none',
+            lutStrength: 1.0,
+            applyLUT: true
         };
+        console.log('⚙️ Settings initialized:', this.currentSettings);
+    }
+
+    async loadAvailableLUTs() {
+        try {
+            console.log('🎨 Loading available LUTs...');
+            this.availableLUTs = await this.lutProcessor.getAvailableLUTs();
+            this.populateLUTDropdown();
+            console.log('✅ Available LUTs loaded:', this.availableLUTs.length, 'LUTs found');
+        } catch (error) {
+            console.error('❌ Failed to load LUT list:', error);
+        }
+    }
+
+    populateLUTDropdown() {
+        const lutSelect = document.getElementById('lutSelect');
+        
+        // Clear existing options (keep "none")
+        while (lutSelect.options.length > 1) {
+            lutSelect.remove(1);
+        }
+        
+        // Add dynamic LUT options
+        this.availableLUTs.forEach(lut => {
+            const option = document.createElement('option');
+            option.value = lut.id;
+            option.textContent = lut.displayName;
+            lutSelect.appendChild(option);
+        });
+        
+        console.log(`📋 LUT dropdown populated with ${this.availableLUTs.length} options`);
+    }
+
+    handleLUTSelection(lutName) {
+        const customUpload = document.getElementById('customLutUpload');
+        customUpload.style.display = lutName === 'custom' ? 'block' : 'none';
+        this.updateSetting('selectedLUT', lutName);
+    }
+
+    async handleCustomLUTUpload(file) {
+        if (!file) return;
+
+        try {
+            this.showLoading(true);
+            await this.lutProcessor.loadCustomLUT(file);
+            console.log('✅ Custom LUT loaded successfully');
+            this.showSuccess('Custom LUT loaded successfully!');
+        } catch (error) {
+            this.showError('Failed to load LUT: ' + error.message);
+        } finally {
+            this.showLoading(false);
+        }
     }
 
     async handleFileSelect(file) {
@@ -79,30 +161,28 @@ class FujiGrainApp {
             this.showLoading(true);
             this.enableControls(false);
             
-            console.log('Processing file:', file.name);
+            console.log('📄 Processing file:', file.name);
             this.currentFile = file;
             
-            // Validate file dan dapatkan data URL
+            // Validate file
             const validation = await this.validator.validateFile(file);
-            console.log('File validated:', validation);
+            console.log('✅ File validated:', validation);
             
-            // Load image menggunakan data URL dari validator
+            // Load image
             await this.loadImage(validation.dataUrl);
             
             // Read EXIF data
             const exifData = await this.exifReader.getExifData(file);
-            console.log('EXIF data:', exifData);
+            console.log('📊 EXIF data:', exifData);
             
-            // Update UI dengan file info
+            // Update UI
             this.updateFileInfo(validation, exifData);
-            
-            // Auto-configure ISO based on EXIF
             this.autoConfigureIso(exifData);
             
             this.enableControls(true);
             
         } catch (error) {
-            console.error('Error processing file:', error);
+            console.error('❌ Error processing file:', error);
             this.showError(error.message);
             this.resetFileInput();
         } finally {
@@ -115,15 +195,15 @@ class FujiGrainApp {
             const img = new Image();
             
             img.onload = () => {
-                console.log('Image loaded:', img.naturalWidth, 'x', img.naturalHeight);
+                console.log('🖼️ Image loaded:', img.naturalWidth, 'x', img.naturalHeight);
                 this.originalImage = img;
                 this.displayOriginalImage(img);
                 resolve(img);
             };
 
             img.onerror = () => {
-                console.error('Failed to load image');
-                reject(new Error('Gagal memuat gambar'));
+                console.error('❌ Failed to load image');
+                reject(new Error('Failed to load image'));
             };
 
             img.src = dataUrl;
@@ -135,10 +215,8 @@ class FujiGrainApp {
         const previewContainer = document.getElementById('previewContainer');
         const emptyState = document.getElementById('emptyState');
 
-        // Clear previous image
+        // Clear and set new image
         originalImgElement.src = '';
-        
-        // Set new image
         originalImgElement.src = img.src;
         
         // Update canvas preview
@@ -148,25 +226,24 @@ class FujiGrainApp {
         canvas.height = img.naturalHeight;
         ctx.drawImage(img, 0, 0);
         
-        // Show/hide containers
+        // Update UI state
         previewContainer.classList.remove('d-none');
         emptyState.classList.add('d-none');
 
         // Update image stats
         document.getElementById('imageStats').textContent = 
-            `Dimensi: ${img.naturalWidth} × ${img.naturalHeight} pixels | Aspect Ratio: ${(img.naturalWidth / img.naturalHeight).toFixed(2)}`;
+            `Dimensions: ${img.naturalWidth} × ${img.naturalHeight} pixels | Aspect Ratio: ${(img.naturalWidth / img.naturalHeight).toFixed(2)}`;
     }
 
     updateFileInfo(validation, exifData) {
         const fileInfo = this.validator.getFileInfo(validation.file, validation);
         
-        // Update file info display
+        // Update file info
         document.getElementById('fileDetails').textContent = 
-            `Nama: ${fileInfo.name} | Ukuran: ${fileInfo.size} | Dimensi: ${fileInfo.dimensions}`;
-        
+            `Name: ${fileInfo.name} | Size: ${fileInfo.size} | Dimensions: ${fileInfo.dimensions}`;
         document.getElementById('fileInfo').classList.remove('d-none');
 
-        // Update EXIF info if available
+        // Update EXIF info
         if (exifData) {
             document.getElementById('exifDetails').textContent = 
                 this.exifReader.formatExifDisplay(exifData);
@@ -182,53 +259,104 @@ class FujiGrainApp {
             const recommendedIso = this.exifReader.getRecommendedIso(exifData);
             isoSelect.value = recommendedIso;
             this.updateSetting('iso', recommendedIso);
-            console.log('Auto-configured ISO to:', recommendedIso);
+            console.log('⚙️ Auto-configured ISO to:', recommendedIso);
         }
     }
 
     updateSetting(key, value) {
         this.currentSettings[key] = value;
-        console.log('Setting updated:', key, value);
-        
-        // Auto-apply jika gambar sudah diproses
-        if (this.processedCanvas) {
-            this.applyGrain();
+        console.log('⚙️ Setting updated:', key, value);
+    }
+
+    async applyGrain() {
+        if (!this.originalImage) {
+            this.showError('Please upload an image first');
+            return;
+        }
+
+        // 🚀 PRIORITAS: Tampilkan loading screen DULU
+        this.showLoading(true);
+        this.enableControls(false);
+        document.getElementById('processedCanvas').classList.add('grain-loading');
+
+        // ⏳ Beri browser waktu untuk render loading screen
+        await new Promise(resolve => setTimeout(resolve, 50));
+
+        try {
+            console.log('🎯 Starting image processing with settings:', this.currentSettings);
+            
+            // Step 1: Apply grain
+            const canvas = await this.grainProcessor.applyGrainOptimized(
+                this.originalImage, 
+                this.currentSettings
+            );
+
+            // Step 2: Apply LUT if enabled
+            if (this.currentSettings.applyLUT && 
+                this.currentSettings.selectedLUT && 
+                this.currentSettings.selectedLUT !== 'none') {
+                
+                await this.applyLUTToCanvas(canvas);
+            }
+
+            // Step 3: Update result
+            this.processedCanvas = canvas;
+            this.displayProcessedImage();
+            
+            console.log('✅ Image processing completed successfully');
+            this.showSuccess('Grain and color grading applied successfully!');
+            
+        } catch (error) {
+            console.error('❌ Error processing image:', error);
+            this.handleProcessingError(error);
+            
+        } finally {
+            this.showLoading(false);
+            this.enableControls(true);
+            document.getElementById('processedCanvas').classList.remove('grain-loading');
         }
     }
 
+    async applyLUTToCanvas(canvas) {
+        try {
+            console.log('🎨 Applying LUT:', this.currentSettings.selectedLUT);
+            
+            const ctx = canvas.getContext('2d');
+            const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+            
+            const processedData = await this.lutProcessor.applyLUT(
+                imageData, 
+                this.currentSettings.selectedLUT,
+                this.currentSettings.lutStrength || 1.0
+            );
+            
+            if (!processedData || !(processedData instanceof ImageData)) {
+                throw new Error('LUT processing returned invalid ImageData');
+            }
+            
+            ctx.putImageData(processedData, 0, 0);
+            console.log('✅ LUT applied successfully');
+            
+        } catch (lutError) {
+            console.error('❌ LUT processing failed:', lutError);
+            this.showError('LUT processing failed: ' + lutError.message + '. Continuing without color grading.');
+        }
+    }
 
-	async applyGrain() {
-		if (!this.originalImage) {
-			console.error('No image to process');
-			return;
-		}
-
-		try {
-			this.showLoading(true);
-			console.log('Applying natural grain with settings:', this.currentSettings);
-			
-			// Add loading state to preview
-			document.getElementById('processedCanvas').classList.add('grain-loading');
-			
-			// Use optimized grain processor
-			this.processedCanvas = await this.grainProcessor.applyGrainOptimized(
-				this.originalImage, 
-				this.currentSettings
-			);
-
-			this.displayProcessedImage();
-			document.getElementById('downloadBtn').disabled = false;
-			console.log('Natural grain applied successfully');
-			
-		} catch (error) {
-			console.error('Error applying grain:', error);
-			this.showError('Gagal menerapkan grain: ' + error.message);
-		} finally {
-			this.showLoading(false);
-			document.getElementById('processedCanvas').classList.remove('grain-loading');
-		}
-	}
-
+    handleProcessingError(error) {
+        let errorMessage = 'Failed to process image: ' + error.message;
+        
+        if (error.message.includes('memory') || error.message.includes('size')) {
+            errorMessage = 'Image is too large for processing. Try with a smaller image.';
+        } else if (error.message.includes('LUT')) {
+            errorMessage = 'Color grading failed: ' + error.message;
+        } else if (error.message.includes('grain')) {
+            errorMessage = 'Grain application failed: ' + error.message;
+        }
+        
+        this.showError(errorMessage);
+        this.resetImage();
+    }
 
     displayProcessedImage() {
         const canvasElement = document.getElementById('processedCanvas');
@@ -245,14 +373,43 @@ class FujiGrainApp {
         if (this.originalImage) {
             this.displayOriginalImage(this.originalImage);
             this.processedCanvas = null;
-            document.getElementById('downloadBtn').disabled = true;
-            console.log('Image reset to original');
+            
+            // Reset UI controls
+            this.resetUIControls();
+            
+            // Reset settings
+            this.currentSettings = {
+                iso: '800',
+                strength: 0.7,
+                grainSize: 1.0,
+                selectedLUT: 'none',
+                lutStrength: 1.0,
+                applyLUT: true
+            };
+            
+            console.log('🔄 Image and settings reset to original');
         }
+    }
+
+    resetUIControls() {
+        // Reset LUT controls
+        document.getElementById('lutSelect').value = 'none';
+        document.getElementById('customLutUpload').style.display = 'none';
+        document.getElementById('lutStrengthSlider').value = 1.0;
+        document.getElementById('lutStrengthValue').textContent = '1.0';
+        document.getElementById('applyLutToggle').checked = true;
+        
+        // Reset grain controls
+        document.getElementById('isoSelect').value = '800';
+        document.getElementById('strengthSlider').value = 0.7;
+        document.getElementById('strengthValue').textContent = '0.7';
+        document.getElementById('grainSizeSlider').value = 1.0;
+        document.getElementById('grainSizeValue').textContent = '1.0';
     }
 
     downloadResult() {
         if (!this.processedCanvas) {
-            console.error('No processed image to download');
+            this.showError('No processed image to download. Please apply grain first.');
             return;
         }
 
@@ -262,20 +419,48 @@ class FujiGrainApp {
             link.download = `fuji-grain-${timestamp}.jpg`;
             link.href = this.processedCanvas.toDataURL('image/jpeg', 0.95);
             link.click();
-            console.log('Download initiated');
+            
+            console.log('📥 Download initiated');
+            this.showSuccess('Download started!');
+            
         } catch (error) {
-            console.error('Download error:', error);
-            this.showError('Gagal mengunduh gambar');
+            console.error('❌ Download error:', error);
+            this.showError('Failed to download image: ' + error.message);
         }
     }
 
     enableControls(enabled) {
-        document.getElementById('applyGrainBtn').disabled = !enabled;
-        document.getElementById('resetBtn').disabled = !enabled;
-        document.getElementById('downloadBtn').disabled = !enabled;
-        document.getElementById('isoSelect').disabled = !enabled;
-        document.getElementById('strengthSlider').disabled = !enabled;
-        document.getElementById('grainSizeSlider').disabled = !enabled;
+        const controls = [
+            'applyGrainBtn', 'resetBtn', 'downloadBtn', 
+            'isoSelect', 'strengthSlider', 'grainSizeSlider',
+            'lutSelect', 'lutStrengthSlider', 'applyLutToggle', 'lutFileInput'
+        ];
+        
+        controls.forEach(controlId => {
+            const element = document.getElementById(controlId);
+            if (element) {
+                element.disabled = !enabled;
+                
+                // Update apply button appearance
+                if (controlId === 'applyGrainBtn') {
+                    if (enabled) {
+                        element.innerHTML = '<i class="fas fa-magic me-2"></i>Apply Grain & LUT';
+                        element.classList.remove('btn-secondary');
+                        element.classList.add('btn-primary');
+                    } else {
+                        element.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Processing...';
+                        element.classList.remove('btn-primary');
+                        element.classList.add('btn-secondary');
+                    }
+                }
+            }
+        });
+        
+        // Update download button state
+        const downloadBtn = document.getElementById('downloadBtn');
+        if (downloadBtn) {
+            downloadBtn.disabled = !(enabled && this.processedCanvas);
+        }
     }
 
     resetFileInput() {
@@ -286,22 +471,82 @@ class FujiGrainApp {
 
     showLoading(show) {
         const spinner = document.getElementById('loadingSpinner');
+        const overlay = document.getElementById('loadingOverlay');
+        
         if (show) {
+            // Prioritaskan tampilan loading screen
             spinner.classList.remove('d-none');
+            if (!overlay) {
+                const newOverlay = document.createElement('div');
+                newOverlay.id = 'loadingOverlay';
+                newOverlay.className = 'position-fixed top-0 start-0 w-100 h-100 bg-dark bg-opacity-75 d-none';
+                newOverlay.style.zIndex = '9998';
+                document.body.appendChild(newOverlay);
+            }
+            // Force synchronous rendering
+            document.getElementById('loadingOverlay').classList.remove('d-none');
+            document.body.style.cursor = 'wait';
+            
         } else {
             spinner.classList.add('d-none');
+            if (overlay) {
+                overlay.classList.add('d-none');
+            }
+            document.body.style.cursor = 'default';
         }
     }
 
     showError(message) {
-        // Gunakan alert sederhana dulu
-        alert(`Error: ${message}`);
-        console.error('App Error:', message);
+        console.error('❌ App Error:', message);
+        
+        // Use Bootstrap toast for better UX
+        const toast = document.createElement('div');
+        toast.className = 'toast align-items-center text-white bg-danger border-0 position-fixed top-0 end-0 m-3';
+        toast.style.zIndex = '9999';
+        toast.innerHTML = `
+            <div class="d-flex">
+                <div class="toast-body">
+                    <i class="fas fa-exclamation-triangle me-2"></i>${message}
+                </div>
+                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
+            </div>
+        `;
+        
+        document.body.appendChild(toast);
+        new bootstrap.Toast(toast, { delay: 5000 }).show();
+        
+        // Auto remove after hide
+        toast.addEventListener('hidden.bs.toast', () => {
+            toast.remove();
+        });
+    }
+    
+    showSuccess(message) {
+        console.log('✅ Success:', message);
+        
+        const toast = document.createElement('div');
+        toast.className = 'toast align-items-center text-white bg-success border-0 position-fixed top-0 end-0 m-3';
+        toast.style.zIndex = '9999';
+        toast.innerHTML = `
+            <div class="d-flex">
+                <div class="toast-body">
+                    <i class="fas fa-check-circle me-2"></i>${message}
+                </div>
+                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
+            </div>
+        `;
+        
+        document.body.appendChild(toast);
+        new bootstrap.Toast(toast, { delay: 3000 }).show();
+        
+        toast.addEventListener('hidden.bs.toast', () => {
+            toast.remove();
+        });
     }
 }
 
-// Initialize app ketika DOM ready
+// Initialize app when DOM is ready
 document.addEventListener('DOMContentLoaded', () => {
-    console.log('DOM loaded, initializing app...');
+    console.log('🌐 DOM loaded, initializing Fujifilm Grain Simulator...');
     new FujiGrainApp();
 });
