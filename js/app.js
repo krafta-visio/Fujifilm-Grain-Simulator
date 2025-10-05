@@ -114,24 +114,36 @@ class FujiGrainApp {
         }
     }
 
-    populateLUTDropdown() {
-        const lutSelect = document.getElementById('lutSelect');
-        
-        // Clear existing options (keep "none")
-        while (lutSelect.options.length > 1) {
-            lutSelect.remove(1);
-        }
-        
-        // Add dynamic LUT options
-        this.availableLUTs.forEach(lut => {
-            const option = document.createElement('option');
-            option.value = lut.id;
-            option.textContent = lut.displayName;
-            lutSelect.appendChild(option);
-        });
-        
-        console.log(`📋 LUT dropdown populated with ${this.availableLUTs.length} options`);
-    }
+	populateLUTDropdown() {
+		const lutSelect = document.getElementById('lutSelect');
+		
+		// Create a new option set
+		const newOptions = [
+			// Static options
+			{ value: 'none', text: 'No LUT (Original Colors)', selected: true },
+			{ value: 'custom', text: 'Custom LUT...' }
+		];
+		
+		// Add dynamic LUTs
+		this.availableLUTs.forEach(lut => {
+			newOptions.push({
+				value: lut.id,
+				text: lut.displayName
+			});
+		});
+		
+		// Clear and rebuild dropdown
+		lutSelect.innerHTML = '';
+		newOptions.forEach(opt => {
+			const option = document.createElement('option');
+			option.value = opt.value;
+			option.textContent = opt.text;
+			if (opt.selected) option.selected = true;
+			lutSelect.appendChild(option);
+		});
+		
+		console.log(`📋 LUT dropdown rebuilt with ${this.availableLUTs.length} LUTs + static options`);
+	}
 
     handleLUTSelection(lutName) {
         const customUpload = document.getElementById('customLutUpload');
@@ -391,21 +403,21 @@ class FujiGrainApp {
         }
     }
 
-    resetUIControls() {
-        // Reset LUT controls
-        document.getElementById('lutSelect').value = 'none';
-        document.getElementById('customLutUpload').style.display = 'none';
-        document.getElementById('lutStrengthSlider').value = 1.0;
-        document.getElementById('lutStrengthValue').textContent = '1.0';
-        document.getElementById('applyLutToggle').checked = true;
-        
-        // Reset grain controls
-        document.getElementById('isoSelect').value = '800';
-        document.getElementById('strengthSlider').value = 0.7;
-        document.getElementById('strengthValue').textContent = '0.7';
-        document.getElementById('grainSizeSlider').value = 1.0;
-        document.getElementById('grainSizeValue').textContent = '1.0';
-    }
+	resetUIControls() {
+		// Reset LUT controls - set to "none" instead of rebuilding
+		document.getElementById('lutSelect').value = 'none';
+		document.getElementById('customLutUpload').style.display = 'none';
+		document.getElementById('lutStrengthSlider').value = 1.0;
+		document.getElementById('lutStrengthValue').textContent = '1.0';
+		document.getElementById('applyLutToggle').checked = true;
+		
+		// Reset grain controls
+		document.getElementById('isoSelect').value = '800';
+		document.getElementById('strengthSlider').value = 0.7;
+		document.getElementById('strengthValue').textContent = '0.7';
+		document.getElementById('grainSizeSlider').value = 1.0;
+		document.getElementById('grainSizeValue').textContent = '1.0';
+	}
 
     downloadResult() {
         if (!this.processedCanvas) {
