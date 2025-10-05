@@ -1,0 +1,509 @@
+{
+  "version": "2.0.0",
+  "manifest": {
+    "name": "Fujifilm Grain Simulator LUT Collection",
+    "description": "Professional film simulation LUTs for authentic color grading",
+    "totalLUTs": 50,
+    "lastUpdated": "2025-01-20",
+    "developer": "krafta."
+  },
+  "luts": [
+    {
+      "id": "Agfa_Chrome_RSX",
+      "name": "Agfa Chrome RSX",
+      "category": "agfa",
+      "type": "slide",
+      "description": "Agfa's professional slide film with rich colors and fine grain",
+      "brand": "Agfa",
+      "iso": "100",
+      "characteristics": ["vibrant", "saturated", "professional"]
+    },
+    {
+      "id": "Agfa_Optima_100",
+      "name": "Agfa Optima 100",
+      "category": "agfa",
+      "type": "color",
+      "description": "European color negative film with natural color reproduction",
+      "brand": "Agfa",
+      "iso": "100",
+      "characteristics": ["natural", "balanced", "european"]
+    },
+    {
+      "id": "Agfa_Portrait_160",
+      "name": "Agfa Portrait 160",
+      "category": "agfa",
+      "type": "portrait",
+      "description": "Professional portrait film with excellent skin tones",
+      "brand": "Agfa",
+      "iso": "160",
+      "characteristics": ["portrait", "skin tones", "soft"]
+    },
+    {
+      "id": "Agfa_Ultra_100",
+      "name": "Agfa Ultra 100",
+      "category": "agfa",
+      "type": "color",
+      "description": "High saturation color film for vibrant results",
+      "brand": "Agfa",
+      "iso": "100",
+      "characteristics": ["vibrant", "saturated", "high-contrast"]
+    },
+    {
+      "id": "Agfa_Vista_Plus",
+      "name": "Agfa Vista Plus",
+      "category": "agfa",
+      "type": "consumer",
+      "description": "Popular consumer film with reliable color reproduction",
+      "brand": "Agfa",
+      "iso": "200",
+      "characteristics": ["consumer", "reliable", "versatile"]
+    },
+    {
+      "id": "Baryte_Mono",
+      "name": "Baryte Mono",
+      "category": "blackwhite",
+      "type": "bw",
+      "description": "Warm-toned black and white with baryta paper aesthetic",
+      "brand": "Mineral Series",
+      "iso": "400",
+      "characteristics": ["warm", "baryta", "fine-art"]
+    },
+    {
+      "id": "Benitoite_Mono",
+      "name": "Benitoite Mono",
+      "category": "blackwhite",
+      "type": "bw",
+      "description": "Cool blue-toned monochrome with deep blacks",
+      "brand": "Mineral Series",
+      "iso": "400",
+      "characteristics": ["cool", "blue-tone", "contrasty"]
+    },
+    {
+      "id": "Beryl_Mono",
+      "name": "Beryl Mono",
+      "category": "blackwhite",
+      "type": "bw",
+      "description": "Emerald green toned monochrome for creative effects",
+      "brand": "Mineral Series",
+      "iso": "400",
+      "characteristics": ["green-tone", "creative", "vintage"]
+    },
+    {
+      "id": "Bismuth_Mono",
+      "name": "Bismuth Mono",
+      "category": "blackwhite",
+      "type": "bw",
+      "description": "Rainbow-toned monochrome with iridescent characteristics",
+      "brand": "Mineral Series",
+      "iso": "400",
+      "characteristics": ["iridescent", "creative", "experimental"]
+    },
+    {
+      "id": "Bloodstone_Mono",
+      "name": "Bloodstone Mono",
+      "category": "blackwhite",
+      "type": "bw",
+      "description": "Deep red-toned monochrome for dramatic effects",
+      "brand": "Mineral Series",
+      "iso": "400",
+      "characteristics": ["red-tone", "dramatic", "high-contrast"]
+    },
+    {
+      "id": "Bornite_Mono",
+      "name": "Bornite Mono",
+      "category": "blackwhite",
+      "type": "bw",
+      "description": "Purple and blue iridescent monochrome tones",
+      "brand": "Mineral Series",
+      "iso": "400",
+      "characteristics": ["purple", "iridescent", "artistic"]
+    },
+    {
+      "id": "Brazilianite_Mono",
+      "name": "Brazilianite Mono",
+      "category": "blackwhite",
+      "type": "bw",
+      "description": "Yellow-green toned monochrome for vintage looks",
+      "brand": "Mineral Series",
+      "iso": "400",
+      "characteristics": ["yellow-green", "vintage", "warm"]
+    },
+    {
+      "id": "Bronzite_Mono",
+      "name": "Bronzite Mono",
+      "category": "blackwhite",
+      "type": "bw",
+      "description": "Bronze and gold toned monochrome",
+      "brand": "Mineral Series",
+      "iso": "400",
+      "characteristics": ["bronze", "gold-tone", "warm"]
+    },
+    {
+      "id": "Brookite_Mono",
+      "name": "Brookite Mono",
+      "category": "blackwhite",
+      "type": "bw",
+      "description": "Metallic grey tones with industrial aesthetic",
+      "brand": "Mineral Series",
+      "iso": "400",
+      "characteristics": ["metallic", "industrial", "cool"]
+    },
+    {
+      "id": "Brucite_Mono",
+      "name": "Brucite Mono",
+      "category": "blackwhite",
+      "type": "bw",
+      "description": "Soft white pearlescent monochrome",
+      "brand": "Mineral Series",
+      "iso": "400",
+      "characteristics": ["pearlescent", "soft", "low-contrast"]
+    },
+    {
+      "id": "Bytownite_Mono",
+      "name": "Bytownite Mono",
+      "category": "blackwhite",
+      "type": "bw",
+      "description": "Warm amber and honey toned monochrome",
+      "brand": "Mineral Series",
+      "iso": "400",
+      "characteristics": ["amber", "honey", "warm"]
+    },
+    {
+      "id": "Calcite_Mono",
+      "name": "Calcite Mono",
+      "category": "blackwhite",
+      "type": "bw",
+      "description": "Clean neutral black and white with pure tones",
+      "brand": "Mineral Series",
+      "iso": "400",
+      "characteristics": ["neutral", "clean", "classic"]
+    },
+    {
+      "id": "Calcite_Orange_Mono",
+      "name": "Calcite Orange Mono",
+      "category": "blackwhite",
+      "type": "bw",
+      "description": "Warm orange sepia toned monochrome",
+      "brand": "Mineral Series",
+      "iso": "400",
+      "characteristics": ["sepia", "orange", "vintage"]
+    },
+    {
+      "id": "Carborundum_Mono",
+      "name": "Carborundum Mono",
+      "category": "blackwhite",
+      "type": "bw",
+      "description": "Industrial grey with metallic sheen",
+      "brand": "Mineral Series",
+      "iso": "400",
+      "characteristics": ["industrial", "metallic", "cool"]
+    },
+    {
+      "id": "Celestite_Mono",
+      "name": "Celestite Mono",
+      "category": "blackwhite",
+      "type": "bw",
+      "description": "Soft blue celestial toned monochrome",
+      "brand": "Mineral Series",
+      "iso": "400",
+      "characteristics": ["celestial", "soft-blue", "dreamy"]
+    },
+    {
+      "id": "Cryolite_Mono",
+      "name": "Cryolite Mono",
+      "category": "blackwhite",
+      "type": "bw",
+      "description": "Ice cold blue-white monochrome",
+      "brand": "Mineral Series",
+      "iso": "400",
+      "characteristics": ["icy", "cool", "high-contrast"]
+    },
+    {
+      "id": "Fujifilm_Astia_100F",
+      "name": "Fujifilm Astia 100F",
+      "category": "fujifilm",
+      "type": "slide",
+      "description": "Professional slide film with neutral color and fine grain",
+      "brand": "Fujifilm",
+      "iso": "100",
+      "characteristics": ["neutral", "fine-grain", "professional"]
+    },
+    {
+      "id": "Fujifilm_Color_100",
+      "name": "Fujifilm Color 100",
+      "category": "fujifilm",
+      "type": "consumer",
+      "description": "Popular consumer film with accurate color reproduction",
+      "brand": "Fujifilm",
+      "iso": "100",
+      "characteristics": ["accurate", "consumer", "versatile"]
+    },
+    {
+      "id": "Fujifilm_Fortia_50",
+      "name": "Fujifilm Fortia 50",
+      "category": "fujifilm",
+      "type": "slide",
+      "description": "Rare high-saturation slide film for vibrant colors",
+      "brand": "Fujifilm",
+      "iso": "50",
+      "characteristics": ["vibrant", "rare", "high-saturation"]
+    },
+    {
+      "id": "Fujifilm_Negative",
+      "name": "Fujifilm Negative",
+      "category": "fujifilm",
+      "type": "color",
+      "description": "General purpose color negative film simulation",
+      "brand": "Fujifilm",
+      "iso": "200",
+      "characteristics": ["general-purpose", "balanced", "natural"]
+    },
+    {
+      "id": "Fujifilm_PRO_160",
+      "name": "Fujifilm PRO 160",
+      "category": "fujifilm",
+      "type": "portrait",
+      "description": "Professional portrait film with excellent skin tones",
+      "brand": "Fujifilm",
+      "iso": "160",
+      "characteristics": ["portrait", "skin-tones", "professional"]
+    },
+    {
+      "id": "Fujifilm_Provia_100F",
+      "name": "Fujifilm Provia 100F",
+      "category": "fujifilm",
+      "type": "slide",
+      "description": "Versatile professional slide film with natural colors",
+      "brand": "Fujifilm",
+      "iso": "100",
+      "characteristics": ["versatile", "natural", "professional"]
+    },
+    {
+      "id": "Fujifilm_Sensia_100",
+      "name": "Fujifilm Sensia 100",
+      "category": "fujifilm",
+      "type": "slide",
+      "description": "Consumer slide film with vibrant color reproduction",
+      "brand": "Fujifilm",
+      "iso": "100",
+      "characteristics": ["vibrant", "consumer", "slide"]
+    },
+    {
+      "id": "Fujifilm_Superia_400",
+      "name": "Fujifilm Superia 400",
+      "category": "fujifilm",
+      "type": "consumer",
+      "description": "Popular consumer film for general photography",
+      "brand": "Fujifilm",
+      "iso": "400",
+      "characteristics": ["consumer", "versatile", "all-purpose"]
+    },
+    {
+      "id": "Fujifilm_Superia_800",
+      "name": "Fujifilm Superia 800",
+      "category": "fujifilm",
+      "type": "consumer",
+      "description": "High-speed consumer film for low light situations",
+      "brand": "Fujifilm",
+      "iso": "800",
+      "characteristics": ["high-speed", "low-light", "consumer"]
+    },
+    {
+      "id": "Fujifilm_Velvia_100",
+      "name": "Fujifilm Velvia 100",
+      "category": "fujifilm",
+      "type": "slide",
+      "description": "Legendary high-saturation slide film for landscapes",
+      "brand": "Fujifilm",
+      "iso": "100",
+      "characteristics": ["high-saturation", "landscape", "legendary"]
+    },
+    {
+      "id": "Fujifilm_XPro",
+      "name": "Fujifilm X-Pro",
+      "category": "fujifilm",
+      "type": "creative",
+      "description": "Cross-processing effect for creative color shifts",
+      "brand": "Fujifilm",
+      "iso": "100",
+      "characteristics": ["cross-process", "creative", "color-shift"]
+    },
+    {
+      "id": "Kodak_Echrome_100",
+      "name": "Kodak Echrome 100",
+      "category": "kodak",
+      "type": "slide",
+      "description": "Professional slide film with accurate color reproduction",
+      "brand": "Kodak",
+      "iso": "100",
+      "characteristics": ["accurate", "professional", "slide"]
+    },
+    {
+      "id": "Kodak_Echrome_200",
+      "name": "Kodak Echrome 200",
+      "category": "kodak",
+      "type": "slide",
+      "description": "High-speed professional slide film",
+      "brand": "Kodak",
+      "iso": "200",
+      "characteristics": ["high-speed", "professional", "slide"]
+    },
+    {
+      "id": "Kodak_Echrome_64",
+      "name": "Kodak Echrome 64",
+      "category": "kodak",
+      "type": "slide",
+      "description": "Fine-grain professional slide film",
+      "brand": "Kodak",
+      "iso": "64",
+      "characteristics": ["fine-grain", "professional", "slide"]
+    },
+    {
+      "id": "Kodak_Echrome",
+      "name": "Kodak Echrome",
+      "category": "kodak",
+      "type": "slide",
+      "description": "Classic professional slide film simulation",
+      "brand": "Kodak",
+      "iso": "100",
+      "characteristics": ["classic", "professional", "slide"]
+    },
+    {
+      "id": "Kodak_Ektar_100",
+      "name": "Kodak Ektar 100",
+      "category": "kodak",
+      "type": "color",
+      "description": "World's finest grain color negative film",
+      "brand": "Kodak",
+      "iso": "100",
+      "characteristics": ["fine-grain", "vibrant", "professional"]
+    },
+    {
+      "id": "Kodak_Elite_100",
+      "name": "Kodak Elite 100",
+      "category": "kodak",
+      "type": "slide",
+      "description": "Premium consumer slide film",
+      "brand": "Kodak",
+      "iso": "100",
+      "characteristics": ["premium", "consumer", "slide"]
+    },
+    {
+      "id": "Kodak_Gold_200",
+      "name": "Kodak Gold 200",
+      "category": "kodak",
+      "type": "consumer",
+      "description": "Popular consumer film with warm tones",
+      "brand": "Kodak",
+      "iso": "200",
+      "characteristics": ["warm", "consumer", "popular"]
+    },
+    {
+      "id": "Kodak_Kodachrome_64",
+      "name": "Kodak Kodachrome 64",
+      "category": "kodak",
+      "type": "slide",
+      "description": "Legendary slide film known for archival qualities",
+      "brand": "Kodak",
+      "iso": "64",
+      "characteristics": ["legendary", "archival", "classic"]
+    },
+    {
+      "id": "Kodak_Portra_160",
+      "name": "Kodak Portra 160",
+      "category": "kodak",
+      "type": "portrait",
+      "description": "Professional portrait film with fine grain",
+      "brand": "Kodak",
+      "iso": "160",
+      "characteristics": ["portrait", "fine-grain", "professional"]
+    },
+    {
+      "id": "Kodak_Portra_400",
+      "name": "Kodak Portra 400",
+      "category": "kodak",
+      "type": "portrait",
+      "description": "World's most popular professional portrait film",
+      "brand": "Kodak",
+      "iso": "400",
+      "characteristics": ["portrait", "versatile", "professional"]
+    },
+    {
+      "id": "Kodak_Portra_800",
+      "name": "Kodak Portra 800",
+      "category": "kodak",
+      "type": "portrait",
+      "description": "High-speed professional portrait film",
+      "brand": "Kodak",
+      "iso": "800",
+      "characteristics": ["high-speed", "portrait", "low-light"]
+    },
+    {
+      "id": "Kodak_Portra",
+      "name": "Kodak Portra",
+      "category": "kodak",
+      "type": "portrait",
+      "description": "General Portra film characteristics",
+      "brand": "Kodak",
+      "iso": "400",
+      "characteristics": ["portrait", "natural", "professional"]
+    },
+    {
+      "id": "Polaroid_Cinematic",
+      "name": "Polaroid Cinematic",
+      "category": "polaroid",
+      "type": "creative",
+      "description": "Movie film inspired look with cinematic tones",
+      "brand": "Polaroid",
+      "iso": "200",
+      "characteristics": ["cinematic", "creative", "moody"]
+    },
+    {
+      "id": "Polaroid_Color_600",
+      "name": "Polaroid Color 600",
+      "category": "polaroid",
+      "type": "instant",
+      "description": "Classic Polaroid instant film colors",
+      "brand": "Polaroid",
+      "iso": "600",
+      "characteristics": ["instant", "vintage", "classic"]
+    },
+    {
+      "id": "Polaroid_Color_Instant",
+      "name": "Polaroid Color Instant",
+      "category": "polaroid",
+      "type": "instant",
+      "description": "General Polaroid instant film simulation",
+      "brand": "Polaroid",
+      "iso": "600",
+      "characteristics": ["instant", "vintage", "warm"]
+    }
+  ],
+  "categories": {
+    "fujifilm": {
+      "name": "Fujifilm",
+      "count": 11,
+      "description": "Professional and consumer films from Fujifilm"
+    },
+    "kodak": {
+      "name": "Kodak",
+      "count": 13,
+      "description": "Legendary films from Kodak including Portra and Ektar"
+    },
+    "agfa": {
+      "name": "Agfa",
+      "count": 5,
+      "description": "European film classics from Agfa"
+    },
+    "polaroid": {
+      "name": "Polaroid",
+      "count": 3,
+      "description": "Instant film simulations from Polaroid"
+    },
+    "blackwhite": {
+      "name": "Black & White",
+      "count": 18,
+      "description": "Monochrome and toned black and white films"
+    }
+  }
+}
